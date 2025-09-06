@@ -1,0 +1,6 @@
+__pycache__/
+plots/
+.venv/
+data/
+project_data.zip
+roma/
