@@ -1,4 +1,4 @@
-from image import load_images, images_to_arr
+from image import load_images, images_to_grayscale_arr
 from exif import K_and_inv_from_exif
 
 class ImageData:
@@ -40,11 +40,9 @@ class ImageData:
 		'''
 		path = 'data/' + str(dataset) + '/'
 		self.images, self.paths = load_images(path)  # Load images from the dataset path
-		self.grayscales = images_to_arr(self.images)  # Convert images to grayscale arrays
+		self.grayscales = images_to_grayscale_arr(self.images)  # Convert images to grayscale arrays
 
 		# Extract camera intrinsic matrix and its inverse from EXIF data
-
-		# self.K, self.K_inv = K_and_inv_from_exif(self.images[0])
 		self.K, self.K_inv = K_and_inv_from_exif(self.paths[0])
 		self.H, self.W = 2*self.K[0,2], 2*self.K[1,2]
 
