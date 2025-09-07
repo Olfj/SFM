@@ -2,7 +2,7 @@ from PIL import Image
 import numpy as np
 import numpy.typing as npt
 import glob
-import matplotlib.pyplot as plt
+
 
 def load_images(
 		path : str
@@ -24,21 +24,22 @@ def load_images(
 	paths = []
 	
 	for f in glob.iglob(f'{path}*'):
+
 		images.append(Image.open(f))
 		paths.append(f)
 		
 
 	return images, paths
 
-def images_to_arr(
+def images_to_grayscale_arr(
 		images : list[Image.Image]
 		) -> list[npt.NDArray]:
 
-	images_arr = []
+	grayscales = []
 
 	for img in images:
 
 		gray = img.convert('L')
-		images_arr.append(np.array(gray))
+		grayscales.append(np.array(gray))
 
-	return images_arr
+	return grayscales
