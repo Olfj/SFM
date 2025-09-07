@@ -13,9 +13,9 @@ def camera_center_and_axis(
 
 	return center, axis
 
-def plot_cams_and_more_points(
-		X : npt.ArrayLike,
-		cams : npt.ArrayLike, 
+def plot_scene_and_cameras(
+		X : list[npt.NDArray],
+		cams : list[npt.NDArray], 
 		size : float = 0.1,
 		title : str = ''
 		) -> None:
@@ -23,40 +23,15 @@ def plot_cams_and_more_points(
 	ax = plt.figure(figsize=(10, 10)).add_subplot(projection='3d')
 	
 	for x in X:
-		ax.scatter(*x, s=size)
+		ax.scatter(*x, s=size) # type: ignore
 		ax.set_aspect('equal', adjustable='box')
 		# ax.view_init(elev=elev, azim=azim, roll=roll)
 		ax.set_title(title)
 
-	ax.scatter([0], [0], [0], s=50*size, label= '(0,0,0)', color='green')
+	ax.scatter([0], [0], [0], s=50*size, label= '(0,0,0)', color='green') # type: ignore  
 	ax.legend()
 
 	for i, cam in enumerate(cams):
 		cam_cent, cam_ax = camera_center_and_axis(cam)
 		ax.quiver(*cam_cent, *cam_ax/2, color='orange', linewidth=2)
-	plt.show();plt.close()
-
-def plot_cams(
-		X : npt.ArrayLike,
-		cams : npt.ArrayLike, 
-		size : float = 0.1,
-		title : str = '', 
-		elev : float = 0, 
-		azim : float = 0,
-		roll : float = 0
-		) -> None:
-	
-	ax = plt.figure(figsize=(10, 10)).add_subplot(projection='3d')
-	ax.scatter(*X, s=size, label='X')
-	ax.set_aspect('equal', adjustable='box')
-	ax.view_init(elev=elev, azim=azim, roll=roll)
-	ax.set_title(title)
-
-	for cam in cams:
-		cam_cent, cam_ax = camera_center_and_axis(cam)
-		ax.quiver(*cam_cent, *cam_ax/2, color='orange')
-	
-	ax.scatter([0], [0], [0], s=5*size, label= '(0,0,0)', color='green')
-	ax.legend()
-
 	plt.show();plt.close()
