@@ -42,7 +42,7 @@ class PipeLine:
 		xs = [pflat(images.K_inv @ x) for x in xs]
 
 		# Estimate t from rotations and points
-		ts = estimate_ts_robust(xs, Xs, Rs, images, verbose=verbose, eps=images.pixel_treshold, num_runs=num_ransac_t)
+		ts = estimate_ts_robust(xs, Xs, Rs, images.K, verbose=verbose, eps=images.pixel_treshold, num_runs=num_ransac_t)
 
 		# Put rotations and translations together for camera matricies
 		Ps = Ps_from_R_t(Rs, ts)
@@ -55,4 +55,4 @@ if __name__=='__main__':
 	
 
 	pipeline = PipeLine()
-	pipeline.struct_from_motion(dataset=10, verbose=True, num_ransac_E=10000, num_ransac_t=10000)
+	pipeline.struct_from_motion(dataset=5, verbose=True, num_ransac_E=10000, num_ransac_t=10000)

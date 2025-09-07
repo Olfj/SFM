@@ -2,14 +2,12 @@ import numpy as np
 import numpy.typing as npt
 from misc import pflat
 from tqdm import tqdm
-from image_data import ImageData
-
 
 def estimate_ts_robust(
 		xs : list[npt.NDArray],
 		Xs : list[npt.NDArray],
 		Rs : list[npt.NDArray],
-		images : ImageData,
+		K : npt.NDArray,
 		verbose : bool = False,
 		eps : float = 1,
 		num_runs : int = 20000
@@ -17,7 +15,7 @@ def estimate_ts_robust(
 			
 	ts = []
 	for i in tqdm(range(len(xs)), disable=not(verbose), desc='Estimating translations using RANSAC'):
-		t, _, _ = estimate_translation_robust(xs[i], Xs[i], Rs[i], images.K, eps=eps, num_runs=num_runs)
+		t, _, _ = estimate_translation_robust(xs[i], Xs[i], Rs[i], K, eps=eps, num_runs=num_runs)
 		ts.append(t)
 	
 	return ts
