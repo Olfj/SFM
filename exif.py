@@ -1,4 +1,3 @@
-import PIL.Image as Image
 import numpy as np
 import numpy.typing as npt
 import piexif
@@ -44,7 +43,7 @@ def K_and_inv_from_exif(
 	pixel_y = exif_dict["Exif"].get(piexif.ExifIFD.PixelYDimension)
 	focal_35 = exif_dict["Exif"].get(piexif.ExifIFD.FocalLengthIn35mmFilm)
 
-	# Fallback to ImageWidth/ImageLength if missing
+	# Fallback to ImageWidth/ImageLength if missing x/y dimension
 	if pixel_x is None:
 		pixel_x = exif_dict["0th"].get(piexif.ImageIFD.ImageWidth)
 	if pixel_y is None:
@@ -59,20 +58,3 @@ def K_and_inv_from_exif(
 	K_inv = np.linalg.inv(K)
 	
 	return K, K_inv
-
-
-# def Ks_and_inv_from_exif(
-# 		*images : Image.Image
-# 		) -> tuple[list[npt.NDArray], list[npt.NDArray]]:
-	
-# 	Ks = []
-# 	invs = []
-
-# 	for image in images:
-# 		K, K_inv = K_and_inv_from_exif(image)
-# 		Ks.append(K)
-# 		invs.append(K_inv)
-
-# 	return Ks, invs
-
-
