@@ -1,7 +1,6 @@
-import argparse
 from sift import SIFT_matches, x_X_from_descript, X_and_descript_from_inital_pair
 from image_data import ImageData
-from plotting import plot_cams_and_more_points, plot_cams
+from plotting import plot_cams_and_more_points
 from essential import extract_R_from_xs
 from triangulate import triangulate_Xs
 from misc import pflat, Ps_from_R_t
@@ -56,4 +55,4 @@ if __name__=='__main__':
 	
 
 	pipeline = PipeLine()
-	pipeline.struct_from_motion(dataset=9, verbose=True, num_ransac_E=10000, num_ransac_t=10000)
+	pipeline.struct_from_motion(dataset=10, verbose=True, num_ransac_E=10000, num_ransac_t=10000)
