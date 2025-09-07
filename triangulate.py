@@ -1,6 +1,5 @@
 import numpy as np
 import numpy.typing as npt
-from misc import close_enough
 from tqdm import tqdm
 
 def triangulate_Xs(
@@ -14,7 +13,7 @@ def triangulate_Xs(
 	for i in tqdm(range(len(Ps)-1), disable=not(verbose), desc='Triangulating matched points using known camera matricies.'):
 		Xi = triangulate_known_cam(Ps[i], Ps[i+1], x1s[i], x2s[i])
 		Xs.append(Xi)
-	mask = close_enough(Xs)
+	mask = near_centroid(Xs)
 	for i in range(len(Xs)):
 		Xs[i] = Xs[i][:,mask[i]]
 
@@ -98,7 +97,7 @@ def triangulate_3D_point_DLT(
 	M = np.array(M).reshape((4,4))
 
 	M = M.T @ M
-	U, s, V = np.linalg.svd(M, full_matrices=False)
+	_, _, V = np.linalg.svd(M, full_matrices=False)
 	res = V[-1]
 	return res / res[-1]
 
@@ -107,7 +106,7 @@ def extract_P_from_E(
 		W : npt.NDArray
 		) -> npt.NDArray:
 
-	U, S, VT = np.linalg.svd(E)
+	U, _, VT = np.linalg.svd(E)
 	VT = -VT if np.linalg.det(U@VT.T) < 0 else VT
 	u_3 = U[:,-1]
 
@@ -125,3 +124,46 @@ def extract_P_from_E(
 	P_4[:,:-1] = U @ W.T @ VT
 
 	return np.array([P_1, P_2, P_3, P_4])
+
+def near_centroid(point_sets):
+	'''
+	Filters 3D points in multiple sets based on their distance to the global center of mass.
+
+	Args:
+			point_sets (list of np.ndarray): A list of 3 x n numpy arrays of 3D points.
+
+	Returns:
+			list of np.ndarray: A list of boolean masks, where each mask corresponds to a point set and
+													indicates whether the point is closer to the global center of mass than
+													5 times the 90% quantile of global distances.
+	'''
+	# Validate input
+	for points in point_sets:
+		if points.shape[0] != 3:
+			raise ValueError("Each input array must have a shape of 3 x n.")
+
+	# Combine all points to calculate the global center of mass
+	if len(point_sets) > 1:
+		all_points = np.hstack(point_sets)
+	else:
+		all_points = point_sets[0]
+	
+	global_center_of_mass = np.mean(all_points, axis=1, keepdims=True)
+
+	# Compute the Euclidean distances from the global center of mass for all points
+	global_distances = np.linalg.norm(all_points - global_center_of_mass, axis=0)
+
+	# Calculate the 90% quantile of the global distances
+	global_quantile_90 = np.quantile(global_distances, 0.9)
+
+	# Compute the threshold (2 times the 90% quantile)
+	threshold = 2 * global_quantile_90
+
+	# Generate masks for each point set
+	masks = []
+	for points in point_sets:
+		distances = np.linalg.norm(points - global_center_of_mass, axis=0)
+		mask = distances < threshold
+		masks.append(mask)
+
+	return masks

@@ -70,7 +70,7 @@ def estimate_F_DLT(
 	for i in range(n):
 		M[i,:] = np.outer(x_2[:,i], x_1[:,i]).flatten()
 	
-	U, S, V = np.linalg.svd(M)
+	_, _, V = np.linalg.svd(M)
 	return V[-1,: ].reshape((3,3))
 
 def estimate_E_robust(
