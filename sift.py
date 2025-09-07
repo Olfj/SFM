@@ -1,10 +1,8 @@
 import numpy as np
 import numpy.typing as npt
-from typing import Sequence
 import cv2 as cv
-import matplotlib.pyplot as plt
-from matplotlib import colormaps
-import random, itertools
+
+from typing import Sequence
 from tqdm import tqdm
 from essential import estimate_E_robust
 from triangulate import triangulate
@@ -15,7 +13,7 @@ def X_and_descript_from_inital_pair(Rs, images : ImageData, eps):
 	cam1, cam2 = images.initial_pair
 	R = Rs[cam1]
 	
-	keys, descriptors, matches, x1s, x2s = SIFT_matches([images.grayscales[cam1], images.grayscales[cam2]], verbose=True)
+	_, descriptors, matches, x1s, x2s = SIFT_matches([images.grayscales[cam1], images.grayscales[cam2]], verbose=True)
 	
 	X_descript = [descriptors[0][m.queryIdx] for m in matches[0]]
 	match_index = [m.queryIdx for m in matches[0]]
@@ -102,7 +100,7 @@ def SIFT_points(
 	sift = cv.SIFT.create()
 
 	for image in tqdm(images, disable=not(verbose), desc='Calculating SIFT points:'):
-		key_points, description = sift.detectAndCompute(image, None)
+		key_points, description = sift.detectAndCompute(image, None) # type: ignore
 		keys.append(key_points)
 		descriptors.append(description)
 
@@ -192,16 +190,12 @@ def SIFT_matches_two_cam(
 	sift = cv.SIFT.create()
 	bf = cv.BFMatcher(cv.NORM_L2, crossCheck=True)
 
-	# index_params = dict(algorithm=1, trees=5)  # 1: KDTree algorithm
-	# search_params = dict(checks=50)  # Number of checks to perform
-	# flann = cv.FlannBasedMatcher(index_params, search_params)
-
 	if img_1.ndim == 3 and img_2.ndim == 3:
 		img_1 = cv.cvtColor(img_1, cv.COLOR_BGR2GRAY)
 		img_2 = cv.cvtColor(img_2, cv.COLOR_BGR2GRAY)
 
-	key_points_1, descript_1 = sift.detectAndCompute(img_1, None)
-	key_points_2, descript_2 = sift.detectAndCompute(img_2, None)
+	key_points_1, descript_1 = sift.detectAndCompute(img_1, None) # type: ignore
+	key_points_2, descript_2 = sift.detectAndCompute(img_2, None) # type: ignore
 
 	# matches = flann.knnMatch(descript_1, descript_2, k=2) 
 	matches = bf.match(descript_1, descript_2)
@@ -215,39 +209,3 @@ def SIFT_matches_two_cam(
 		x_2[:-1,i] = key_points_2[match.trainIdx].pt
 
 	return x_1, x_2
-
-def disp_rand_SIFT_matches(
-		x_1 : npt.NDArray, 
-		x_2 : npt.NDArray, 
-		img_1 : npt.NDArray, 
-		img_2 : npt.NDArray, 
-		num_matches : int
-		)-> None:
-
-	# Select matches.
-	total_matches = np.max(x_1.shape)
-	random_matches = random.sample(range(total_matches), num_matches)
-	
-	# Create a side by side image.
-	img_height = img_1.shape[0]
-	img_width = img_1.shape[1]
-	output_img = np.zeros(shape=(img_height, img_width*2))
-
-	output_img[:,:img_width] = img_1
-	output_img[:,img_width:] = img_2
-
-	# Display output image.
-	plt.figure(figsize=(15,30))
-	plt.imshow(output_img, cmap='gray')
-	plt.xticks([]);plt.yticks([])
-
-	# Colors for matches
-	colors = itertools.cycle(colormaps['tab10'].colors)
-
-	# Plot point between the two input images.
-	for index in random_matches:
-		color = next(colors)
-		plt.plot([x_1[0,index], x_2[0, index] + img_width], [x_1[1,index], x_2[1, index]], '.', color=color, markersize=5)
-		plt.plot([x_1[0,index], x_2[0, index] + img_width], [x_1[1,index], x_2[1, index]], color= color)
-
-	plt.show();plt.close()
