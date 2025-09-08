@@ -2,8 +2,8 @@
 
 A simple structure from motion library. 
 
-<img src="readme_img/DSC_0340.JPG" alt="alt text" width="300">
-<img src="readme_img/image.png" alt="alt text" width="445">
+<img src="readme_img/DSC_0340.JPG" alt="alt text" width="200">
+<img src="readme_img/image.png" alt="alt text" width="300">
 
 
 TODO:
