@@ -39,7 +39,7 @@ def plot_scene_and_cameras(
 	ax = plt.figure(figsize=(10, 10)).add_subplot(projection='3d')
 	
 	for x in X:
-		ax.scatter(*x, s=size) # type: ignore
+		ax.scatter(*x, s=size, color = 'b') # type: ignore
 		ax.set_aspect('equal', adjustable='box')
 		ax.set_title(title)
 

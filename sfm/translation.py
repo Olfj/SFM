@@ -113,7 +113,7 @@ def estimate_translation_robust(
 				inliers = within_threshold
 				num_inliers = num_within_threshold
 	
-	if inliers == None or t == None:
+	if (inliers is None) or (t is None):
 		raise RuntimeError('No samples without 0 in final column.')
 
 	return t, inliers, num_inliers

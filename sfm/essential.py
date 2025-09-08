@@ -50,7 +50,6 @@ def extract_R_from_xs(
 
     return Rs, inliers
 
-
 def point_line_distance_2d(
         line: npt.NDArray, 
         point: npt.NDArray
@@ -171,7 +170,7 @@ def estimate_E_robust(
             inliers = within_threshold
             num_inliers = num_within_threshold
 
-    if E == None or inliers == None:
+    if (E is None) or (inliers is None):
         raise RuntimeError(f'No essential matrix found in {num_runs} RANSAC iterations.')
 
     return E, inliers, num_inliers
