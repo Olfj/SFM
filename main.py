@@ -1,10 +1,10 @@
-from sift import sift_matches, x_X_from_descript, X_and_descript_from_inital_pair
+from sfm.sift import sift_matches, x_X_from_descript, X_and_descript_from_inital_pair
+from sfm.plotting import plot_scene_and_cameras
+from sfm.essential import extract_R_from_xs
+from sfm.triangulate import triangulate_Xs
+from sfm.misc import pflat, Ps_from_R_t
+from sfm.translation import estimate_ts_robust
 from image_data import ImageData
-from plotting import plot_scene_and_cameras
-from essential import extract_R_from_xs
-from triangulate import triangulate_Xs
-from misc import pflat, Ps_from_R_t
-from translation import estimate_ts_robust
 
 class PipeLine:
 
