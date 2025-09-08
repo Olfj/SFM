@@ -1,6 +1,35 @@
 # Structure from motion
 
-A simple structure from motion pipeline 
+A simple structure from motion library. 
+
+<img src="readme_img/DSC_0340.JPG" alt="alt text" width="300">
+<img src="readme_img/image.png" alt="alt text" width="445">
+
+
+TODO:
+- Remove hardcoded image data in ImageData and allow user to provide folder path and initial pair for themselves.
+- Add function for making the visualized points the same color as in the original image.
+- Untangle the files in sfm/ further. The functions should mor clearly belong in their respective file.
+
+
+## Structure
+
+    SFM/
+    │
+    ├── image/
+    │   ├── exif.py             # Loading exif data
+    │   └── image_data.py       # ImagaData holds information about dataset
+    │
+    ├── scripts/
+    │   └── pipeline.py         # Test pipeline
+    │
+    ├── sfm/
+    │   ├── essential.py
+    │   ├── misc.py
+    │   ├── plotting.py
+    │   ├── sift.py
+    │   ├── translation.py
+    │   └── triangulate.py
 
 ## Usage
 
@@ -9,7 +38,7 @@ A simple structure from motion pipeline
     py -3.10 -m venv .venv
     .\.venv\Scripts\activate
     pip install -r requirements.txt
-    python .\main.py
+    python -m scripts.pipeline
 
 If you get the error message 
 
@@ -30,4 +59,4 @@ to allow the current PowerShell session to run scripts.
     python3.10 -m venv .venv
     source .venv/bin/activate
     pip install -r requirements.txt
-    python main.py
+    python -m scripts.pipeline
