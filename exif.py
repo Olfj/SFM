@@ -7,34 +7,23 @@ def K_and_inv_from_exif(
 		) -> tuple[npt.NDArray, npt.NDArray]:
 	
 	'''
-	Creates the calibration matrix K from the exif data of an image. Returns K and its inverse K_inv
+	Creates the calibration matrix K from the exif data of an image. Returns K and its inverse.
 
-	# Parameters
+	### Parameters
+	- img_path (str): path to image file.
 
-	- img_path: path to image file.
-
-	# Returns
-
-	- K : NDArray 
+	### Returns
+	- K (np.ndarray): 
 		3x3 matrix according to:
 
 			pixel_x = number of pixels in a horizontal image row.
-			
 			pixel_y = like pixel_x but vertical.
-			
 			f = focal length in pixels = pixel_x * (focal_35/35).
+			K = [[f, 0, pixel_x/2],
+				 [0, f, pixel_y/2],
+				 [0, 0, 1]]
 
-			K = [
-
-			[f, 0, pixel_x/2],
-			
-			[0, f, pixel_y/2],
-			
-			[0, 0, 1]
-
-			]
-
-	- K_inv : the iverse of K calculated using numpy.linalg.inv
+	- K_inv (np.ndarray): the iverse of K .
 	'''
 	
 	exif_dict = piexif.load(img_path)
