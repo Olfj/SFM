@@ -201,9 +201,7 @@ def near_centroid(point_sets):
     - point_sets (list[np.ndarray]): A list of 3xN arrays of 3D points.
 
     ### Returns:
-    - masks (list[np.ndarray]): A list of boolean masks, one per point set,
-      where True indicates the point is closer to the global centroid than 
-      a fixed threshold.
+    - masks (list[np.ndarray]): A list of boolean masks, one per point set, where True indicates the point is closer to the global centroid than a fixed threshold.
     '''
     
     # Validate input
