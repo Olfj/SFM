@@ -2,9 +2,10 @@
 
 A simple structure from motion library. 
 
-<img src="readme_img/DSC_0340.JPG" alt="alt text" width="200">
-<img src="readme_img/image.png" alt="alt text" width="300">
-
+<p float="left">
+    <img src="readme_img/DSC_0340.JPG" alt="alt text" width="200">
+    <img src="readme_img/image.png" alt="alt text" width="300">
+</p>
 
 TODO:
 - Remove hardcoded image data in ImageData and allow user to provide folder path and initial pair for themselves.
