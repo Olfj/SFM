@@ -4,7 +4,7 @@ from sfm.essential import extract_R_from_xs
 from sfm.triangulate import triangulate_Xs
 from sfm.misc import pflat, Ps_from_R_t
 from sfm.translation import estimate_ts_robust
-from image_data import ImageData
+from image.image_data import ImageData
 
 class PipeLine:
 
@@ -35,7 +35,8 @@ class PipeLine:
 		x2s = [x2s[i][:,inliers[i]] for i in range(len(x2s))]
 
 		# Initial pair points X, and the correspoding d2 points in camera 1 x.
-		X, X_descript, _ = X_and_descript_from_inital_pair(Rs, images, images.pixel_treshold)
+		X, X_descript, _ = X_and_descript_from_inital_pair(
+			Rs, images.initial_pair, images. grayscales, images.K, images.K_inv, images.pixel_treshold)
 
 
 		# Matches with initial pair points and 2d points from camera 1 for all cameras

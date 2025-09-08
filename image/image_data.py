@@ -1,4 +1,4 @@
-from exif import K_and_inv_from_exif
+from image.exif import K_and_inv_from_exif
 from PIL import Image
 import glob
 import numpy as np

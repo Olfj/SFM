@@ -4,14 +4,15 @@ import cv2 as cv
 
 from typing import Sequence
 from tqdm import tqdm
-from essential import estimate_E_robust
-from triangulate import triangulate
-from image_data import ImageData
-
+from sfm.essential import estimate_E_robust
+from sfm.triangulate import triangulate
 
 def X_and_descript_from_inital_pair(
 		Rs : list[npt.NDArray], 
-		images: ImageData, 
+		initial_pair : tuple[int, int],
+		grayscales : list[npt.NDArray],
+		K : npt.NDArray,
+		K_inv : npt.NDArray,
 		eps 
 	) -> tuple[npt.NDArray, npt.NDArray, list[int]]:
 	'''
@@ -19,7 +20,9 @@ def X_and_descript_from_inital_pair(
 	
 	### Parameters
 	- Rs (list[np.ndarray]): List of rotation matrices for all cameras.
-	- images (ImageData): Dataset object containing grayscale images, intrinsic calibration, and initial pair info.
+	- initial_pair (tuple[int, int]): indicies of the initial pair of images.
+	- grayscales (list[np.ndarray]): list of grayscale images.
+	- K (np.ndarray): calibration matrix for camera.
 	- eps (float): Noise tolerance used for robust estimation of the essential matrix.
 
 	### Returns
@@ -28,18 +31,18 @@ def X_and_descript_from_inital_pair(
 	- match_index (list[int]): Indices of keypoints in the first image that matched successfully.
 	'''
 	
-	cam1, cam2 = images.initial_pair
+	cam1, cam2 = initial_pair
 	R = Rs[cam1]
 
 	_, descriptors, matches, x1s, x2s = sift_matches(
-		[images.grayscales[cam1], images.grayscales[cam2]], verbose=True
+		[grayscales[cam1], grayscales[cam2]], verbose=True
 	)
 
 	X_descript = [descriptors[0][m.queryIdx] for m in matches[0]]
 	match_index = [m.queryIdx for m in matches[0]]
 
-	x1, x2 = images.K_inv @ x1s[0], images.K_inv @ x2s[0]
-	E, inlier, _ = estimate_E_robust(x1, x2, images.K, eps)
+	x1, x2 = K_inv @ x1s[0], K_inv @ x2s[0]
+	E, inlier, _ = estimate_E_robust(x1, x2, K, eps)
 	x1, x2 = x1[:, inlier], x2[:, inlier]
 	_, X = triangulate(E, x1, x2)
 	X = R.T @ X[:-1]

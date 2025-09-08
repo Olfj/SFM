@@ -1,7 +1,7 @@
 import numpy as np
 import numpy.typing as npt
 from tqdm import tqdm
-from triangulate import triangulate
+from sfm.triangulate import triangulate
 
 def extract_R_from_xs(
         x1s, 
@@ -155,9 +155,6 @@ def estimate_E_robust(
 
     E, inliers, num_inliers = None, None, 0
 
-    if num_runs <= 0:
-        raise ValueError("num_runs must be greater than zero.")    
-
     for _ in range(num_runs):
         samples = np.random.randint(low=0, high=x_1.shape[1], size=8) 
         current_E = estimate_F_DLT(x_1[:, samples], x_2[:, samples])
@@ -173,5 +170,8 @@ def estimate_E_robust(
             E = current_E
             inliers = within_threshold
             num_inliers = num_within_threshold
+
+    if E == None or inliers == None:
+        raise RuntimeError(f'No essential matrix found in {num_runs} RANSAC iterations.')
 
     return E, inliers, num_inliers

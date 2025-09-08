@@ -1,6 +1,6 @@
 import numpy as np
 import numpy.typing as npt
-from misc import pflat
+from sfm.misc import pflat
 from tqdm import tqdm
 
 def estimate_ts_robust(
@@ -99,9 +99,9 @@ def estimate_translation_robust(
 
 	for _ in range(num_runs):
 		samples = np.random.randint(low=0, high=x.shape[1], size=2) 
-		curr_t = estimate_translation(X[:, samples], x[:, samples], R)
+		current_t = estimate_translation(X[:, samples], x[:, samples], R)
 		
-		proj = R @ X + curr_t
+		proj = R @ X + current_t
 		if not(any((x == 0) for x in proj[-1])):  # ensure no division by zero
 			proj = pflat(proj)
 			dist = np.linalg.norm(x - proj, axis=0)
@@ -109,8 +109,11 @@ def estimate_translation_robust(
 			num_within_threshold = np.sum(within_threshold)
 
 			if num_within_threshold > num_inliers:
-				t = curr_t
+				t = current_t
 				inliers = within_threshold
 				num_inliers = num_within_threshold
+	
+	if inliers == None or t == None:
+		raise RuntimeError('No samples without 0 in final column.')
 
 	return t, inliers, num_inliers
