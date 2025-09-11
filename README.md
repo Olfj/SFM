@@ -1,9 +1,9 @@
 # Structure from motion
 
-A simple structure from motion library. 
+A simple structure from motion library. To use extract project_data.zip to folder named "data". The example below is from dataset 3.
 
 <p float="left">
-    <img src="readme_img/DSC_0340.JPG" alt="alt text" width="200">
+    <img src="readme_img\DSC_0485.JPG" alt="alt text" width="200">
     <img src="readme_img/image.png" alt="alt text" width="300">
 </p>
 
@@ -34,6 +34,14 @@ TODO:
 
 ## Usage
 
+### Linux/macOS:
+
+
+    python3.10 -m venv .venv
+    source .venv/bin/activate
+    pip install -r requirements.txt
+    python -m scripts.pipeline
+
 ### Windows:
 
     py -3.10 -m venv .venv
@@ -53,11 +61,3 @@ use
     Set-ExecutionPolicy -Scope Process -ExecutionPolicy Bypass
 
 to allow the current PowerShell session to run scripts.
-
-### Linux/macOS:
-
-
-    python3.10 -m venv .venv
-    source .venv/bin/activate
-    pip install -r requirements.txt
-    python -m scripts.pipeline
