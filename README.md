@@ -1,6 +1,6 @@
 # Structure from motion
 
-A simple structure from motion library. To use extract project_data.zip to folder named "data". The example below is from dataset 3.
+A simple structure from motion library. To use extract project_data.zip to folder named "data". The example below is from dataset 4.
 
 <p float="left">
     <img src="readme_img\DSC_0485.JPG" alt="alt text" width="200">
