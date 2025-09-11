@@ -56,24 +56,5 @@ class PipeLine:
 if __name__=='__main__':
 	
 	pipeline = PipeLine()
-	pipeline.struct_from_motion(dataset=5, verbose=True, num_ransac_E=10000, num_ransac_t=10000)
+	pipeline.struct_from_motion(dataset=4, verbose=True, num_ransac_E=10000, num_ransac_t=10000)
 
-
-
-
-
-
-
-		# pixel_cords = [x[:-1,:].astype(int).T for x in xs]
-		# rgb_ims = [np.array(im) for im in images.images]
-		
-		# colors = []
-		# for i in range(len(pixel_cords)):
-		# 	color = rgb_ims[i][pixel_cords[i][:,1], pixel_cords[i][:,0], :]
-		# 	print(pixel_cords[i].shape)
-		# 	print(color.shape)
-		# 	colors.append(color)
-
-		# plt.imshow(images.grayscales[4], cmap='gray')
-		# plt.scatter(*xs[4], color='b')
-		# plt.show()
