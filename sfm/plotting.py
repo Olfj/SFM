@@ -39,7 +39,7 @@ def plot_scene_and_cameras(
 	ax = plt.figure(figsize=(10, 10)).add_subplot(projection='3d')
 	
 	for x in X:
-		ax.scatter(*x, s=size, color = 'b') # type: ignore
+		ax.scatter(*x, s=size) # type: ignore
 		ax.set_aspect('equal', adjustable='box')
 		ax.set_title(title)
 
@@ -49,4 +49,9 @@ def plot_scene_and_cameras(
 	for cam in Ps:
 		cam_cent, cam_axis = camera_center_and_axis(cam)
 		ax.quiver(*cam_cent, *cam_axis/2, color='orange', linewidth=2)
+
+	ax.grid(False)
+	ax.set_xticks([])
+	ax.set_yticks([])
+	ax.set_zticks([]) # type: ignore
 	plt.show();plt.close()
